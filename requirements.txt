@@ -1,0 +1,9 @@
+numpy
+pyyaml
+scipy
+matplotlib
+pillow
+torch
+gym
+gymnasium
+tianshou>=0.5.0

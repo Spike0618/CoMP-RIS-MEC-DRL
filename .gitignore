@@ -1,0 +1,40 @@
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+*.pyd
+*.so
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Training outputs and checkpoints
+runs/
+results/
+logs/
+tb/
+wandb/
+checkpoints/
+*.pt
+*.pth
+*.ckpt
+
+# Generated evaluation artifacts
+evals/
+figs/
+*.gif.tmp
+
+# Local IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Local scratch files
+tmp/
+*.log
+*.bak

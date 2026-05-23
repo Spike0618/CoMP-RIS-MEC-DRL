@@ -1,0 +1,289 @@
+seed: 3411
+scenario:
+  L: 150.0
+  M: 5
+  I: 10
+  T: 80
+  dt: 1.0
+  H: 60.0
+  Rc: 90.0
+  K: 2
+  Vmax: 12.0
+  dmin: 8.0
+  noise_bucket_enable: true
+  noise_bucket_mode: round_robin
+  noise_bucket_levels:
+  - 0.85
+  - 1.0
+  - 1.15
+  uav_init_mode: random
+  uav_fixed_positions:
+  - - 50.0
+    - 110.0
+  - - 110.0
+    - 50.0
+  - - 75.0
+    - 75.0
+  - - 40.0
+    - 40.0
+  - - 110.0
+    - 110.0
+  user_mobility_mode: static
+  user_mobility_prob: 0.0
+  user_speed: 0.0
+  user_heading_jitter: 0.0
+  user_reflect_boundary: true
+  user_fixed_positions:
+  - - 35.0
+    - 115.0
+  - - 45.0
+    - 120.0
+  - - 40.0
+    - 105.0
+  - - 115.0
+    - 35.0
+  - - 120.0
+    - 45.0
+  - - 105.0
+    - 40.0
+  - - 70.0
+    - 75.0
+  - - 80.0
+    - 70.0
+  - - 35.0
+    - 35.0
+  - - 115.0
+    - 115.0
+  user_position_jitter: 5.0
+  user_position_refresh_interval: 1
+  t6_edge_user_ratio: 0.45
+  t6_edge_band_frac: 0.16
+  train_total_steps: 1200450
+ris:
+  num_ris: 3
+  ris_positions:
+  - - 45.0
+    - 110.0
+  - - 110.0
+    - 45.0
+  - - 75.0
+    - 90.0
+  v:
+  - 75.0
+  - 75.0
+  N: 1024
+  eta: 0.95
+  ris_boost: 30.0
+  beta0: 2.0e-07
+  enable_ris: true
+comm:
+  B: 1.0e7
+  N0: 3.98e-21
+  p: 0.008
+  R_min: 1.0e5
+  power_mode: per_uav
+  comp_coherence_boost: 1.0
+  t6_interference_alpha: 1.0
+  t6_interference_jitter: 0.08
+  t6_direct_blockage_prob: 0.2
+  t6_direct_blockage_min_gain: 0.45
+  t6_direct_blockage_max_gain: 0.85
+  t6_direct_blockage_refresh_each_step: false
+compute:
+  fmax:
+  - 2.7e9
+  - 4.0e9
+  - 5.3e9
+  - 6.0e9
+  - 7.0e9
+  theta_min: 0.05
+  xi: 1.0e-28
+  theta_mode: solver
+  theta_softmax_tau: 0.3
+task:
+  task_type: uniform
+  D_bits_base: 3.0e7
+  C_cycles_base: 1.68e8
+  jitter: 0.3
+  load_scale: 1.0
+  task_arrival_jitter: 0.0
+  task_size_jitter: 0.05
+objective:
+  w_delay: 0.8
+  w_energy: 0.2
+  T_scale: 0.35
+  E_scale: 0.03
+  vio_penalty: 1.0
+  vio_penalty_mode: post
+  violation_penalty_scale: 0.3
+  action_space_mode: hierarchical
+  z4_action_mode: hierarchical
+  comp_rule_threshold: 0.22
+  z4_comp_meta_enable: false
+  z4_assoc_stage_enable: false
+  z4_assoc_stage_start_frac: 0.15
+  z4_assoc_stage_end_frac: 0.75
+  z4_assoc_stage_policy_min: 0.0
+  z4_assoc_stage_policy_max: 1.0
+  z4_assoc_stage_smoothstep: true
+  z4_assoc_stage_score_clip: 1.0
+  z4_comp_meta_thr_delta_max: 0.1
+  z4_comp_meta_thr_min: 0.1
+  z4_comp_meta_thr_max: 0.45
+  z4_comp_meta_score_width: 0.16
+  z4_comp_meta_temp_scale_delta: 0.4
+  z4_comp_meta_temp_scale_min: 0.7
+  z4_comp_meta_temp_scale_max: 1.35
+  z4_comp_meta_ema_beta: 0.8
+  z4_comp_meta_warmup_start_frac: 0.02
+  z4_comp_meta_warmup_end_frac: 0.12
+  action_score_mode: shared
+  association_mode: soft
+  assoc_soft_temp: 0.2
+  comp_score_temp: 0.25
+  comp_temp_anneal_enable: 0
+  comp_temp_stage_0: 0.25
+  comp_temp_stage_1: 0.18
+  comp_temp_stage_2: 0.12
+  comp_score_eval_hard: true
+  t6_hier_assoc_solver: hungarian
+  t6_hier_assoc_require_scipy: true
+  t6_hier_assoc_rebalance_enable: true
+  t6_hier_assoc_rebalance_rounds: 2
+  t6_hier_assoc_rebalance_weight: 1.0
+  t6_hier_assoc_rebalance_tol: 0.05
+  t6_hier_assoc_load_alpha: 0.1
+  t6_hier_assoc_use_task_weight: true
+  t6_hier_compute_mode: load_aware
+  t6_hier_compute_load_weight: 1.0
+  t6_hier_compute_dist_weight: 0.15
+  t6_hier_compute_gain_weight: 0.1
+  t6_hier_compute_sort_demand_desc: true
+  reward_design: z5_saturating
+  z5_r_max: 2.0
+  z5_kappa: 15.0
+  z5_anchor_norm: 1.15
+  z4_reward_offset: 0.5
+  z4_reward_alpha: 5.0
+  z4_bonus_gamma: 25.0
+  z4_bonus_anchor: 1.2
+  z4_bonus_power: 0.88
+  z4_gap_enable: false
+  z4_gap_lambda: 0.18
+  z4_gap_clip: 0.4
+  z4_gap_warmup_start_frac: 0.0
+  z4_gap_warmup_end_frac: 0.05
+  z4_gap_anneal_start_frac: 0.65
+  z4_gap_anneal_end_frac: 0.95
+  z4_gap_anneal_floor: 0.25
+  z4_gap_ema_enable: true
+  z4_gap_ema_beta: 0.95
+  z4_gap_grad_ratio_max: 0.4
+  z4_gap_lambda_hard_cap: 1.2
+  z4_gap_shape_guard_enable: true
+  z4_gap_shape_guard_min_steps: 1200
+  z4_gap_shape_guard_tol: 0.015
+  z4_gap_shape_guard_patience: 4
+  z_cost_ref: 3.1526768469264805
+  lambda_v: 1.0
+  vio_max_expected: 5.0
+  obs_enable_rate_feedback: true
+  obs_enable_cost_feedback: true
+  obs_enable_prev_action: true
+  reward:
+    t6:
+      beta_potential: 0.0
+      ref_cost_mode: no_comp
+      cost_scale_ema_beta: 0.95
+      traj_bonus_weight: 0.0
+      potential_gamma: 0.99
+      main_weight_start: 1.0
+      main_weight_end: 1.0
+      potential_scale_start: 1.0
+      potential_scale_end: 1.0
+      traj_scale_start: 1.0
+      traj_scale_end: 1.0
+      anneal_start_frac: 0.0
+      anneal_end_frac: 0.0
+      metric_calib_enable: true
+      metric_calib_delay_ref: 1.0
+      metric_calib_energy_ref: 1.0
+      metric_calib_clip: 3.5
+      metric_calib_mix: 1.0
+  constraint:
+    pid:
+      enable: false
+      kp: 0.03
+      ki: 0.008
+      kd: 0.003
+      delta: 0.3
+      update_interval: 2
+      lambda_min: 0.0
+      lambda_max: 2.0
+      violation_ema_beta: 0.95
+      deadband: 0.05
+      lambda_step_clip: 0.25
+      integral_decay: 1.0
+      freeze_after_frac: 0.9
+  lambda_comp_usage: 0.0
+  lambda_comp_switch: 0.0
+  lambda_ris_usage: 0.0
+  lambda_velocity_penalty: 0.0
+  lambda_boundary_penalty: 0.0
+  lambda_idle_penalty: 0.0
+  phaseg_v2_enable: false
+  beta_comp_max: 0.0
+  beta_ris_max: 0.0
+  reward_proximity_weight: 0.0
+  reward_proximity_weight_final: 0.0
+  reward_proximity_decay_start_step: 999999
+  reward_proximity_decay_end_step: 999999
+  reward_proximity_mode: absolute
+  coverage_floor_weight: 0.5
+  coverage_floor_threshold: 0.85
+  reward_paper_delta_scale: 0.0
+  reward_paper_cost_weight: 0.0
+  reward_wall_weight: 0.0
+  reward_wall_margin_weight: 0.0
+  reward_coverage_margin_weight: 0.0
+  reward_collision_margin_weight: 0.0
+  reward_movement_weight: 0.0
+  reward_potential_weight: 0.0
+  reward_boundary_stick_weight: 0.0
+  reward_safe_clip_weight: 0.0
+  reward_user_nn_weight: 0.0
+  reward_user_centroid_weight: 0.0
+  reward_user_area_gap_weight: 0.0
+  reward_switchback_weight: 0.0
+  reward_boundary_potential_weight: 0.0
+  reward_uncovered_weight: 0.0
+  reward_violation_weight: 0.0
+  phaseh_traj_direct_enable: false
+  phaseh_aux_constraint_scale: 0.0
+  use_fixed_normalization: true
+  norm_update_interval: 10
+  reward_clip_range: 5.0
+  reward_ema_beta: 0.0
+  z_cost_ref_by_load:
+    '0.300': 0.690715534298028
+    '0.500': 1.2753684180356573
+    '0.600': 1.5995395243678359
+    '0.800': 2.3199064377163143
+    '1.000': 3.1526768469264805
+shaping:
+  comp_gate_ratio: 0.0
+  weight_mode: fixed
+  eff_wE_min: 0.3
+  eff_wT_min: 0.1
+  improve_alpha: 0.15
+  theta_mode: solver
+  theta_softmax_tau: 0.3
+  reward_cost_mode: p1
+  assoc_gain_mix: 0.3
+  use_fixed_normalization: true
+  norm_ema_beta: 0.99
+  norm_clip: 5.0
+  norm_update_interval: 10
+  dyn_beta: 0.0
+  dyn_eta: 0.0
+  dyn_update_every: 999999

@@ -1,0 +1,121 @@
+# ============================================================
+
+
+# ============================================================
+run_name_prefix: ppo_phaseZ4_step3
+seed: 3411
+device: cuda
+
+env:
+  num_train_envs: 10
+  num_test_envs: 5
+
+train:
+  total_steps: 50450
+  rollout_steps: 4000
+  train_epochs: 8
+  batch_size: 1024
+  eval_every: 2000
+  save_every: 5000
+  lr: 1.0e-04
+  lr_critic: 2.0e-04
+  min_lr: 1.0e-06
+  lr_anneal: false
+  lr_warmup_steps: 0
+  gamma: 0.99
+  lam: 0.95
+  clip_ratio: 0.18
+  clip_ratio_delta: 0.20
+  clip_ratio_score: 0.18
+  target_kl: 0.030
+  vf_coef: 0.5
+  value_clip: false
+  value_clip_ratio: 0.20
+  vf_loss_norm_returns: false
+  vf_loss_norm_floor: 8.0
+  vf_loss_norm_tail_only: false
+  vf_loss_clip_max: 0.0
+  advantage_normalization: true
+  adv_norm_clip: 5.0
+  adv_norm_clip_tail: 3.0
+  ent_coef: 0.040
+  ent_coef_init: 0.040
+  ent_coef_final: 0.028
+
+
+  ent_coef_decay_steps: 400000
+
+
+  head_tune_enable: false
+  ent_coef_delta_init: 0.012
+  ent_coef_delta_final: 0.010
+  ent_coef_delta_decay_steps: 400000
+  ent_coef_score_init: 0.008
+  ent_coef_score_final: 0.006
+  ent_coef_score_decay_steps: 320000
+  max_grad_norm: 0.5
+  max_grad_norm_critic: 1.0
+  logp_mode: mean
+  obs_norm: true
+  reward_normalization: true
+  reward_step_normalize: false
+  reward_shaping: false
+  strict_env_dispatch: true
+  meta_best_after_action: true
+  resume_use_ckpt_step_offset: false
+  exploration_std_scale_delta_init: 0.45
+  exploration_std_scale_delta_final: 0.34
+  exploration_std_delta_decay_steps: 500000
+  exploration_std_scale_score_init: 0.55
+  exploration_std_scale_score_final: 0.40
+  exploration_std_score_decay_steps: 500000
+  exploration_std_min: 0.22
+  sigma_min: 0.22
+
+  fixed_eval_probe_enable: true
+  fixed_eval_probe_loads_10k: "0.8"
+  fixed_eval_probe_loads_30k: "0.8"
+  fixed_eval_probe_loads_50k: "0.8"
+  fixed_eval_probe_loads_100k: "0.8"
+  log_returns_stats: true
+  log_theta_comp_coupling: true
+
+  z2_cost_ref_auto_calibrate:
+    enable: false
+    episodes: 200
+    baseline_mode: balanced
+    target_key: z_cost_ref
+    write_back_env_yaml: false
+    require_finite: true
+    only_if_placeholder: true
+    placeholder_value: 2.0
+    placeholder_tol: 1.0e-6
+    progress_every: 20
+  bc_warmstart:
+    enable: false
+  lagrange_vio:
+    enabled: false
+  tail_stabilize_enable: false
+
+  train_load_sampling_enable: true
+  train_load_sampling_mode: fixed
+  train_load_sampling_loads: [0.8]
+
+network:
+  hidden_sizes: [512, 512]
+  use_layernorm: true
+  activation: relu
+  share_preprocess: false
+
+eval:
+  eval_episodes: 10
+  eval_loads: [0.8]
+  eval_seeds: [42, 43, 44, 45, 46]
+  eval_ep_per: 3
+
+logging:
+  use_tensorboard: true
+
+misc:
+  resume_path: null
+  require_resume: false
