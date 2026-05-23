@@ -15,10 +15,6 @@ The repository contains the public simulation code used to study how a policy ca
 
 ## Example Results
 
-Training convergence:
-
-![Training convergence](assets/figures/training_convergence.png)
-
 Required-CPU-cycle evaluation:
 
 ![Paper cost versus required CPU cycles](assets/figures/cost_vs_required_cpu.png)
@@ -151,8 +147,6 @@ python scripts/generate_dynamic_comp_viz.py \
 
 ## Notes on Reproducibility
 
-- PPO evaluation uses `checkpoints/ckpt_best.pt` by default.
-- DDPG, SAC, and TD3 comparisons should use final checkpoints, not intermediate best checkpoints.
 - Main evaluation should use the ten-load protocol from `0.1` to `1.0`.
 - Evaluation figures report load through required CPU cycles rather than raw `load_scale`.
 - Checkpoints and full raw training outputs are not included in this public repository.
