@@ -7,11 +7,11 @@
 
 Research code for a rare coupled control problem: joint **CoMP**, **RIS**, **multi-UAV mobility**, and **mobile edge computing (MEC)** resource allocation under time-varying task loads.
 
-This repository studies how one policy can control UAV movement, user association, cooperative multi-point reception, RIS-assisted links, task execution, and edge-computing resource allocation in the same closed-loop simulation.
+This repository is the public artifact behind a paper-style question: how can communication-side gains from CoMP and RIS be converted into system-level MEC benefits through trajectory control, task offloading, execution-node selection, and CPU allocation?
 
 ## Why This Repository Exists
 
-Most UAV-MEC or wireless-RL examples isolate one part of the system: trajectory, offloading, channel enhancement, or resource allocation. This project focuses on the harder case where these decisions are coupled:
+Most UAV-MEC or wireless-RL examples isolate one part of the system: trajectory, offloading, channel enhancement, or resource allocation. This project focuses on the harder case where those decisions are coupled in one closed-loop simulator:
 
 - Moving UAVs changes user coverage and link geometry.
 - RIS changes the effective uplink channel rather than the task objective directly.
@@ -19,15 +19,23 @@ Most UAV-MEC or wireless-RL examples isolate one part of the system: trajectory,
 - MEC allocation decides whether communication-side gains actually reduce delay and energy.
 - The optimization target is system-level cost, not only raw reward.
 
-The proposed ARIA pipeline is therefore evaluated as a full system policy, not as a single-module optimizer.
+The proposed ARIA pipeline is therefore evaluated as a full system policy. The point is not only to make a link stronger; it is to show whether the link improvement survives the whole causal chain from wireless access to edge execution.
+
+![Causal chain of system-level benefit](assets/figures/system_causal_chain.png)
 
 ## Main Result Snapshot
 
-The core public evaluation uses a ten-load protocol and reports task load through required CPU cycles, rather than an internal load-scale variable. Lower paper cost is better.
+The core public evaluation uses a ten-load protocol and reports task demand through required CPU cycles, rather than an internal load-scale variable. Lower system cost is better.
 
-![Paper cost versus required CPU cycles](assets/figures/cost_vs_required_cpu.png)
+![System cost versus required CPU cycles](assets/figures/learning_system_cost.png)
 
-The important behavior is the slope under heavier compute demand: ARIA keeps the system cost lower as required CPU cycles increase, where heuristic and off-policy baselines degrade more sharply.
+The important behavior is the slope under heavier compute demand: ARIA keeps the system cost lower as required CPU cycles increase, while myopic optimization and standard continuous-control DRL baselines degrade more sharply.
+
+## Mechanism and Ablation Evidence
+
+The result is also unpacked through mechanism-level comparisons. This view separates the learned full policy from simpler allocation preferences and CoMP usage patterns, which helps explain why the gain is a system effect instead of a cosmetic reward-curve improvement.
+
+![Mechanism-level system cost comparison](assets/figures/mechanism_system_cost.png)
 
 ## What ARIA Controls
 
@@ -40,9 +48,23 @@ At each decision step, the policy interacts with a joint UAV-MEC environment and
 - task execution and CPU resource allocation.
 - feasibility recovery for safety, coverage, and resource constraints.
 
-The figure below summarizes why communication-side improvements only become system-level benefit after passing through offloading and computation decisions.
+## Dynamic CoMP Behavior
 
-![Causal chain of system-level benefit](assets/figures/system_causal_chain.png)
+Dynamic CoMP is kept as a first-class artifact because the learned policy is not just a scalar cost reducer. It changes service combinations as user positions, UAV geometry, and cooperative reception opportunities evolve.
+
+![Dynamic CoMP animation](assets/figures/dynamic_comp_animation.gif)
+
+Representative key frames:
+
+<p align="center">
+  <img src="assets/figures/dynamic_comp_keyframe_t22.png" alt="Dynamic CoMP key frame at t=22" width="32%">
+  <img src="assets/figures/dynamic_comp_keyframe_t42.png" alt="Dynamic CoMP key frame at t=42" width="32%">
+  <img src="assets/figures/dynamic_comp_keyframe_t62.png" alt="Dynamic CoMP key frame at t=62" width="32%">
+</p>
+
+The timeline view makes the switching behavior explicit across users and time slots.
+
+![Dynamic CoMP service-combination timeline](assets/figures/dynamic_comp_timeline.png)
 
 ## Evidence Chain
 
@@ -50,21 +72,16 @@ This repository is packaged around a reproducible evidence chain rather than a s
 
 | Evidence | What It Checks | Figure |
 |---|---|---|
-| Ten-load performance | Whether cost remains controlled as required CPU cycles increase | `assets/figures/cost_vs_required_cpu.png` |
 | System causal chain | Why CoMP/RIS gains must be coupled with MEC execution | `assets/figures/system_causal_chain.png` |
+| Ten-load learning comparison | Whether cost remains controlled as required CPU cycles increase | `assets/figures/learning_system_cost.png` |
+| Mechanism and ablation | Which system components explain the performance gain | `assets/figures/mechanism_system_cost.png` |
 | Training dynamics | Whether the policy actually learns a stable behavior | `assets/figures/training_convergence.png` |
-| Dynamic CoMP behavior | Whether learned cooperation changes with user and UAV geometry | `assets/figures/dynamic_comp_animation.gif` |
+| Dynamic CoMP behavior | Whether learned cooperation changes with user and UAV geometry | `assets/figures/dynamic_comp_animation.gif`, `assets/figures/dynamic_comp_timeline.png` |
 | Generalization | Whether performance remains competitive in a different evaluation environment | `assets/figures/generalization_absolute_generalization_env.png` |
 
-Training dynamics:
+Training and generalization checks:
 
 ![Training convergence](assets/figures/training_convergence.png)
-
-Dynamic CoMP behavior:
-
-![Dynamic CoMP animation](assets/figures/dynamic_comp_animation.gif)
-
-Generalization environment:
 
 ![Generalization absolute performance](assets/figures/generalization_absolute_generalization_env.png)
 
@@ -72,16 +89,16 @@ Generalization environment:
 
 ```text
 .
-├── assets/figures/          # Selected public result and explanation figures
-├── configs/PhaseZ4/         # Public experiment configurations
-├── scripts/                 # Training, evaluation, calibration, and plotting entry points
-├── src/
-│   ├── algos/               # PPO, DDPG, SAC, TD3, and heuristic baselines
-│   ├── envs/                # CoMP-RIS UAV-MEC simulation environments
-│   ├── utils/               # Configuration, plotting, IO, and reporting utilities
-│   └── agentic/             # Optional meta-controller utilities
-├── requirements.txt
-└── LICENSE
+|-- assets/figures/          # Selected public result and explanation figures
+|-- configs/PhaseZ4/         # Public experiment configurations
+|-- scripts/                 # Training, evaluation, calibration, and plotting entry points
+|-- src/
+|   |-- algos/               # PPO, DDPG, SAC, TD3, and heuristic baselines
+|   |-- envs/                # CoMP-RIS UAV-MEC simulation environments
+|   |-- utils/               # Configuration, plotting, IO, and reporting utilities
+|   +-- agentic/             # Optional meta-controller utilities
+|-- requirements.txt
++-- LICENSE
 ```
 
 ## Key Capabilities
@@ -92,6 +109,7 @@ Generalization environment:
 - Heuristic baselines including balanced, delay-oriented, energy-oriented, always-CoMP, and never-CoMP policies.
 - Unified evaluator for full, no-RIS, and no-CoMP variants.
 - Ten-load evaluation protocol using required CPU cycles as the main x-axis.
+- Mechanism and ablation views for learning baselines, CoMP behavior, and RIS/CoMP contribution.
 - Dynamic CoMP visualization utilities for key frames, timelines, statistics, and animations.
 - Generalization evaluation across training and randomized evaluation environments.
 
